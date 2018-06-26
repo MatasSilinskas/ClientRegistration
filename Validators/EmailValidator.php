@@ -1,8 +1,8 @@
 <?php
 
-require_once 'Validator.php';
+require_once 'ValidatorInterface.php';
 
-class EmailValidator implements Validator
+class EmailValidator implements ValidatorInterface
 {
     public function validate(string $data) : bool
     {

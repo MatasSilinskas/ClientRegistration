@@ -15,10 +15,10 @@ class Client
     /**
      * Client constructor.
      *
-     * @param Validator $emailValidator
-     * @param Validator $phoneNumberValidator
+     * @param ValidatorInterface $emailValidator
+     * @param ValidatorInterface $phoneNumberValidator
      */
-    public function __construct(Validator $emailValidator, Validator $phoneNumberValidator)
+    public function __construct(ValidatorInterface $emailValidator, ValidatorInterface $phoneNumberValidator)
     {
         $this->emailValidator = $emailValidator;
         $this->phoneNumberValidator = $phoneNumberValidator;

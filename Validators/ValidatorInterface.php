@@ -1,6 +1,6 @@
 <?php
 
-interface Validator
+interface ValidatorInterface
 {
     public function validate(string $data) : bool;
 }

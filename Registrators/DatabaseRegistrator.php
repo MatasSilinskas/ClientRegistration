@@ -4,7 +4,7 @@ require_once 'RegistratorInterface.php';
 require_once 'RegistratorException.php';
 require_once './Validators/EmailValidator.php';
 require_once './Validators/PhoneNumberValidator.php';
-require_once './Validators/Validator.php';
+require_once './Validators/ValidatorInterface.php';
 
 class DatabaseRegistrator implements RegistratorInterface
 {
@@ -157,8 +157,8 @@ class DatabaseRegistrator implements RegistratorInterface
 
     private function convertRowToClient(
         array $row,
-        Validator $emailValidator,
-        Validator $phoneNumberValidator
+        ValidatorInterface $emailValidator,
+        ValidatorInterface $phoneNumberValidator
     ) : Client {
         $client = new Client($emailValidator, $phoneNumberValidator);
         $client->setFirstname($row['firstname'])
