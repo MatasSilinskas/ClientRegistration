@@ -16,7 +16,6 @@ $messages = [
     'Comment' => 'Enter the comment: '
 ];
 
-
 $emailValidator = new EmailValidator();
 $phoneNumberValidator = new PhoneNumberValidator();
 
@@ -82,9 +81,15 @@ do {
             echo "Client was deleted succesfully!\n";
             break;
         case 4:
-            foreach ($registrator->listClients() as $client) {
-                echo $client;
-                echo "\n----------------------\n";
+            $clients = $registrator->listClients();
+            if (count($clients) === 0) {
+                echo "Currently no clients are added.\n";
+            }
+            else {
+                foreach ($clients as $client) {
+                    echo $client;
+                    echo "\n----------------------\n";
+                }
             }
             break;
         case 5:
