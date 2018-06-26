@@ -44,6 +44,7 @@ class FileRegistrator implements RegistratorInterface
                     'Client has been skipped because a client with such email already exists',
                     E_USER_WARNING
                 );
+                continue;
             }
             $data .= $this->serializeClient($client);
         }
