@@ -6,8 +6,8 @@ class Client
     private $lastname;
     private $email;
     private $phonenumber1;
-    private $phonenumber2;
-    private $comment;
+    private $phonenumber2 = '';
+    private $comment = '';
 
     private $emailValidator;
     private $phoneNumberValidator;
@@ -167,11 +167,11 @@ class Client
             "\nEmail: " . $this->email .
             "\nPhone numbers: " . $this->phonenumber1;
 
-        if ($this->phonenumber2 !== null) {
+        if ($this->phonenumber2 !== '') {
             $info .= ' ' . $this->phonenumber2;
         }
 
-        if ($this->comment !== null) {
+        if ($this->comment !== '') {
             $info .= "\nComment: " . $this->comment;
         }
 

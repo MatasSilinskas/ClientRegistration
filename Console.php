@@ -1,6 +1,7 @@
 <?php
 
 require_once 'Registrators/FileRegistrator.php';
+require_once 'Registrators/DatabaseRegistrator.php';
 require_once 'Client/Client.php';
 require_once 'Client/ClientException.php';
 require_once 'Validators/EmailValidator.php';
@@ -15,12 +16,17 @@ $messages = [
     'Comment' => 'Enter the comment: '
 ];
 
-$registrator = new FileRegistrator();
+
 $emailValidator = new EmailValidator();
 $phoneNumberValidator = new PhoneNumberValidator();
 
-$handle = fopen ("php://stdin", 'rb');
-echo 'Hello. This is a simple client registration system. ';
+$handle = fopen("php://stdin", 'rb');
+echo 'Hello. This is a simple client registration system. Where would you like to store your data?[FILE/database]';
+if (getConsoleInput($handle) === 'database') {
+    $registrator = new DatabaseRegistrator();
+} else {
+    $registrator = new FileRegistrator();
+}
 listAvailableOptions();
 do {
     echo 'Enter the number of action you`d like to do: ';
@@ -53,7 +59,18 @@ do {
             foreach ($fields as $int => $field) {
                 echo ++$int . '. ' . $field . "\n";
             }
-            $choices = explode(', ', getConsoleInput($handle));
+            $areChoicesCorrect = false;
+            while (!$areChoicesCorrect) {
+                $choices = explode(', ', getConsoleInput($handle));
+                $areChoicesCorrect = true;
+                foreach ($choices as $choice) {
+                    if ($choice > count($fields)) {
+                        $areChoicesCorrect = false;
+                        echo 'Some of your entered choices do not exist. Please enter existing choices: ';
+                        continue;
+                    }
+                }
+            }
             $newClient = clone $oldClient;
             foreach ($choices as $choice) {
                 echo $messages[$fields[$choice - 1]] . "\n";
@@ -166,7 +183,7 @@ function getClientByEmail(RegistratorInterface $registrator, string $firstMessag
 
 /**
  * @param Client $client
- * @param string $message
+ * @param string $field
  * @param        $handle
  */
 function updateField(Client $client, string $field, $handle) {
@@ -174,6 +191,6 @@ function updateField(Client $client, string $field, $handle) {
         updateClient($client, $field, getConsoleInput($handle));
     } catch (ClientException $exception) {
         echo 'The value is incorrect. Enter a new one: ';
-        updateField($client, $field, $handle);
+        updateField($client, $field, STDIN);
     }
 }

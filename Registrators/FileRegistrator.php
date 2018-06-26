@@ -59,7 +59,7 @@ class FileRegistrator implements RegistratorInterface
      */
     public function edit(Client $old, Client $new) : void
     {
-        if ($this->findByEmail($new->getEmail()) !== null) {
+        if ($new->getEmail() !== $old->getEmail() && $this->findByEmail($new->getEmail()) !== null) {
             throw new RegistratorException('Client with such email already exists!');
         }
 
