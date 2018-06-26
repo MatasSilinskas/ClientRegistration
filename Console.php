@@ -74,7 +74,7 @@ do {
             $newClient = clone $oldClient;
             foreach ($choices as $choice) {
                 echo $messages[$fields[$choice - 1]] . "\n";
-                updateField($newClient, array_keys($messages)[$choice - 1], getConsoleInput($handle));
+                updateField($newClient, array_keys($messages)[$choice - 1], $handle);
             }
             $registrator->edit($oldClient, $newClient);
             echo "Client`s info was updated succesfully!\n";
@@ -191,6 +191,6 @@ function updateField(Client $client, string $field, $handle) {
         updateClient($client, $field, getConsoleInput($handle));
     } catch (ClientException $exception) {
         echo 'The value is incorrect. Enter a new one: ';
-        updateField($client, $field, STDIN);
+        updateField($client, $field, $handle);
     }
 }
