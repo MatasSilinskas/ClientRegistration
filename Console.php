@@ -21,12 +21,9 @@ $emailValidator = new EmailValidator();
 $phoneNumberValidator = new PhoneNumberValidator();
 
 $handle = fopen("php://stdin", 'rb');
-echo 'Hello. This is a simple client registration system. Where would you like to store your data?[FILE/database]';
-if (getConsoleInput($handle) === 'database') {
-    $registrator = new DatabaseRegistrator();
-} else {
-    $registrator = new FileRegistrator();
-}
+echo 'Hello. This is a simple client registration system. ';
+
+$registrator = getRegistrator('Where would you like to store your data?[FILE/database]', $handle);
 listAvailableOptions();
 do {
     echo 'Enter the number of action you`d like to do: ';
@@ -193,4 +190,16 @@ function updateField(Client $client, string $field, $handle) {
         echo 'The value is incorrect. Enter a new one: ';
         updateField($client, $field, $handle);
     }
+}
+
+function getRegistrator(string $message, $handle) : RegistratorInterface {
+    echo $message;
+    $input = strtolower(getConsoleInput($handle));
+    if ($input === 'database') {
+        return new DatabaseRegistrator();
+    }
+    if ($input === 'file' || $input === '') {
+        return new FileRegistrator();
+    }
+    return getRegistrator('No such option exists. Please write an existing option: ', $handle);
 }
