@@ -177,4 +177,19 @@ class Client
 
         return $info;
     }
+
+    /**
+     * @return array
+     */
+    public function convertToAssocArray() : array
+    {
+        return [
+            'firstname' => $this->getFirstname(),
+            'lastname' => $this->getLastname(),
+            'email' => $this->getEmail(),
+            'phonenumber1' => $this->getPhonenumber1(),
+            'phonenumber2' => $this->getPhonenumber2(),
+            'comment' => $this->getComment(),
+        ];
+    }
 }

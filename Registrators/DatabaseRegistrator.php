@@ -49,14 +49,7 @@ class DatabaseRegistrator implements RegistratorInterface
         $sql = "INSERT INTO Clients(firstname, lastname, email, phonenumber1, phonenumber2, comment) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = DatabaseRegistrator::$database->prepare($sql);
 
-        $fields = [
-            'firstname' => $client->getFirstname(),
-            'lastname' => $client->getLastname(),
-            'email' => $client->getEmail(),
-            'phonenumber1' => $client->getPhonenumber1(),
-            'phonenumber2' => $client->getPhonenumber2(),
-            'comment' => $client->getComment(),
-        ];
+        $fields = $client->convertToAssocArray();
         $stmt->bind_param("ssssss", $fields['firstname'],  $fields['lastname'], $fields['email'],
             $fields['phonenumber1'], $fields['phonenumber2'], $fields['comment']);
         if (!$stmt->execute()) {
@@ -73,14 +66,7 @@ class DatabaseRegistrator implements RegistratorInterface
         $stmt = DatabaseRegistrator::$database->prepare($sql);
 
         foreach ($clients as $client) {
-            $fields = [
-                'firstname' => $client->getFirstname(),
-                'lastname' => $client->getLastname(),
-                'email' => $client->getEmail(),
-                'phonenumber1' => $client->getPhonenumber1(),
-                'phonenumber2' => $client->getPhonenumber2(),
-                'comment' => $client->getComment(),
-            ];
+            $fields = $client->convertToAssocArray();
             $stmt->bind_param("ssssss", $fields['firstname'],  $fields['lastname'], $fields['email'],
                 $fields['phonenumber1'], $fields['phonenumber2'], $fields['comment']);
             if (!$stmt->execute()) {
@@ -104,15 +90,7 @@ class DatabaseRegistrator implements RegistratorInterface
             "phonenumber1 = ?, phonenumber2  = ?, comment = ? WHERE email = ?";
         $stmt = DatabaseRegistrator::$database->prepare($sql);
 
-        $fields = [
-            'firstname' => $new->getFirstname(),
-            'lastname' => $new->getLastname(),
-            'email' => $new->getEmail(),
-            'phonenumber1' => $new->getPhonenumber1(),
-            'phonenumber2' => $new->getPhonenumber2(),
-            'comment' => $new->getComment(),
-        ];
-
+        $fields = $new->convertToAssocArray();
         $email = $old->getEmail();
 
         $stmt->bind_param("sssssss", $fields['firstname'],  $fields['lastname'], $fields['email'],
@@ -175,7 +153,6 @@ class DatabaseRegistrator implements RegistratorInterface
         }
 
         return $this->convertRowToClient($result, new EmailValidator(), new PhoneNumberValidator());
-
     }
 
     private function convertRowToClient(
@@ -183,7 +160,6 @@ class DatabaseRegistrator implements RegistratorInterface
         Validator $emailValidator,
         Validator $phoneNumberValidator
     ) : Client {
-
         $client = new Client($emailValidator, $phoneNumberValidator);
         $client->setFirstname($row['firstname'])
             ->setLastname($row['lastname'])
